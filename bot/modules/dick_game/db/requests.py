@@ -21,20 +21,18 @@ async def register_mew_user(session_pool, message: aiogram.types.Message, profit
 
 
 async def set_user_data(player, session_pool):
-    try:
         async with session_pool() as session:
-            await session.execute(update(Dick_player).where(Dick_player.key == player.key).values(
-                Dick_player.key == player.key,
-                Dick_player.time == player.time,
-                Dick_player.size == player.size,
-                Dick_player.name == player.name,
-                Dick_player.tlgr_id == player.tlgr_id,
-                Dick_player.chat_id == player.chat_id, ))
+            print(player.size)
+            await session.execute(update(Dick_player).where(Dick_player.key == player.key).values({
+                Dick_player.key: player.key,
+                Dick_player.time: player.time,
+                Dick_player.size: player.size,
+                Dick_player.name: player.name,
+                Dick_player.tlgr_id: player.tlgr_id,
+                Dick_player.chat_id: player.chat_id, }))
             await session.commit()
             return True
-    except:
-        # excepter.set("can`t save user data for dick_game")
-        return None
+
 
 
 async def get_user_data(key, session_pool): #excepter

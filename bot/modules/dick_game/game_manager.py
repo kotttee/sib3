@@ -20,18 +20,19 @@ async def start_game(message: aiogram.types.Message, cache: SimpleMemoryCache, c
         profit = random.randint(chat.dick_game_range[0], chat.dick_game_range[1])
         if hasattr(player, "key"):
             await cache.set(f"DICK_GAME_PLAYER={str(message.chat.id) + str(message.from_user.id)}", player, chat.dick_game_timeout - 60 if chat.dick_game_timeout > 61 else 0)
-            if player.time > time_now + chat.dick_game_timeout:
+            player.time_old = player.time
+            if player.time + chat.dick_game_timeout < time_now:
                 player.name = message.from_user.full_name
                 player.size = player.size + profit
-                player.time_old = player.time
                 player.time = time_now
+                print(player.size)
                 s = await set_user_data(player, session_pool)
                 if not s:
                     return {"text": await get_text("dick_game", chat.lang, 3)}
                 else:
                     if profit > -1:
                         return {"text": await get_text("dick_game", chat.lang, 2, prof=profit,
-                                                       size=player.size + profit)}
+                                                       size=player.size)}
                     else:
                         return {"text": await get_text("dick_game", chat.lang, 2.1, prof=abs(profit),
                                                        size=player.size)}
