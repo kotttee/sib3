@@ -1,4 +1,4 @@
-from bot.modules.talk.functions import version, chance, weather, rand, choose, news
+from bot.modules.talk.functions import version, chance, weather, rand, choose, news, nards
 
 
 # вот это позорище полное
@@ -23,4 +23,7 @@ async def call_function(id: int, data: dict) -> dict:
             return result
         case 6:
             result = await chance.chance(data)
+            return result
+        case 7:
+            result = await nards.play(data)
             return result

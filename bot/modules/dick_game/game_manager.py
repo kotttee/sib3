@@ -19,7 +19,6 @@ async def start_game(message: aiogram.types.Message, cache: SimpleMemoryCache, c
         time_now: int = int(message.date.timestamp())
         profit = random.randint(chat.dick_game_range[0], chat.dick_game_range[1])
         if hasattr(player, "key"):
-            await cache.set(f"DICK_GAME_PLAYER={str(message.chat.id) + str(message.from_user.id)}", player, chat.dick_game_timeout - 60 if chat.dick_game_timeout > 61 else 0)
             player.time_old = player.time
             if player.time + chat.dick_game_timeout < time_now:
                 player.name = message.from_user.full_name
@@ -30,6 +29,8 @@ async def start_game(message: aiogram.types.Message, cache: SimpleMemoryCache, c
                 if not s:
                     return {"text": await get_text("dick_game", chat.lang, 3)}
                 else:
+                    await cache.set(f"DICK_GAME_PLAYER={str(message.chat.id) + str(message.from_user.id)}", player,
+                                    chat.dick_game_timeout)
                     if profit > -1:
                         return {"text": await get_text("dick_game", chat.lang, 2, prof=profit,
                                                        size=player.size)}
@@ -44,6 +45,7 @@ async def start_game(message: aiogram.types.Message, cache: SimpleMemoryCache, c
             s = await register_mew_user(session_pool, message, profit_new_player)
             if not s:
                 return {"text": await get_text("dick_game", chat.lang, 3)}
+            await cache.set(f"DICK_GAME_PLAYER={str(message.chat.id) + str(message.from_user.id)}", player, chat.dick_game_timeout)
             return {"text": await get_text("dick_game", chat.lang, 1, size=profit_new_player)}
 
 

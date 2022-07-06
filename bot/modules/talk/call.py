@@ -5,7 +5,7 @@ from bot.modules.talk import supporting_code, main, dicts
 
 #эта функция принимает текст сообщение и пытается определить что от нее хотят
 async def dialog(message: aiogram.types.Message, bot: aiogram.Bot, queue: asyncio.Queue, cache):
-    result = {"text" : "прости я еще не могу отвечать на это", "keyboard" : None}; call = {"args" : None, "cache" : cache}
+    result = {"text" : "прости я еще не могу отвечать на это", "keyboard" : None}; call = {"args" : None, "cache" : cache, "message": message}
     call = call | await supporting_code.format_text(message.text[5:])
     if call["text"] in dicts.answers_simple.keys():
         result["text"] = dicts.answers_simple[call["text"]]
